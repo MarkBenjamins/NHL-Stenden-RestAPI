@@ -1,0 +1,76 @@
+{
+  "schema": "http://json-schema.org/draft-07/schema",
+  "id": "#root",
+  "title": "Sale database",
+  "description": "Database with sales details",
+  "type": "object",
+  "additionalProperties": false,
+  "properties":
+  {
+    "sales":
+    {
+      "$id": "#sales",
+      "type": "array",
+      "items":
+      {
+        "$ref": "#sale"
+      }
+    },
+
+    "sale":
+    {
+      "$id": "#director",
+      "type": "object",
+      "additionalProperties": false,
+      "properties":
+      {
+        "SalesID":
+        {
+          "type": "int"
+        },
+        "SalesPersonalID":
+        {
+          "type": "int"
+        },
+        "CustomerID":
+        {
+          "type": "int"
+        }
+      },
+      "required": ["///////////////"]
+    },
+
+    "employees":
+    {
+      "$id": "#employees",
+      "type": "array",
+      "items":
+      {
+        "$ref": "#employee"
+      }
+    },
+
+    "employee":
+    {
+      "$id": "#employee",
+      "type": "object",
+      "additionalProperties": false,
+      "properties":
+      {
+        "EmployeeID":
+        {
+          "type": "int"
+        },
+        "first_name":
+        {
+          "type": "string"
+        },
+        "last_name":
+        {
+          "type": "string"
+        }
+      },
+      "required": ["///////////////"]
+    }
+  }
+}
