@@ -7,6 +7,7 @@
   "additionalProperties": false,
   "properties":
   {
+    // Sales
     "sales":
     {
       "$id": "#sales",
@@ -19,27 +20,36 @@
 
     "sale":
     {
-      "$id": "#director",
+      "$id": "#sale",
       "type": "object",
       "additionalProperties": false,
       "properties":
       {
-        "SalesID":
+        "salesID":
         {
-          "type": "int"
+          "type": "integer"
         },
-        "SalesPersonalID":
+        "salesPersonalID":
         {
-          "type": "int"
+          "type": "integer"
         },
-        "CustomerID":
+        "customerID":
         {
-          "type": "int"
+          "type": "integer"
+        },
+        "productID":
+        {
+          "type": "integer"
+        },
+        "quantity":
+        {
+          "type": "integer"
         }
       },
-      "required": ["///////////////"]
+      "required": ["salesID", "salesPersonalID", "customerID", "productID", "quantity"]
     },
 
+    // Employees
     "employees":
     {
       "$id": "#employees",
@@ -57,11 +67,15 @@
       "additionalProperties": false,
       "properties":
       {
-        "EmployeeID":
+        "employeeID":
         {
-          "type": "int"
+          "type": "integer"
         },
         "first_name":
+        {
+          "type": "string"
+        },
+        "middle_initial":
         {
           "type": "string"
         },
@@ -70,7 +84,79 @@
           "type": "string"
         }
       },
-      "required": ["///////////////"]
+      "required": ["first_name", "last_name"]
+    },
+
+    // Customers
+    "customers":
+    {
+      "$id": "#customers",
+      "type": "array",
+      "items":
+      {
+        "$ref": "#customer"
+      }
+    },
+
+    "customer":
+    {
+      "$id": "#customer",
+      "type": "object",
+      "additionalProperties": false,
+      "properties":
+      {
+        "customerID":
+        {
+          "type": "integer"
+        },
+        "first_name":
+        {
+          "type": "string"
+        },
+        "middle_initial":
+        {
+          "type": "string"
+        },
+        "last_name":
+        {
+          "type": "string"
+        }
+      },
+      "required": ["first_name", "last_name"]
+    },
+
+    // Products
+     "products":
+    {
+      "$id": "#products",
+      "type": "array",
+      "items":
+      {
+        "$ref": "#product"
+      }
+    },
+
+    "product":
+    {
+      "$id": "#product",
+      "type": "object",
+      "additionalProperties": false,
+      "properties":
+      {
+        "productID":
+        {
+          "type": "integer"
+        },
+        "name":
+        {
+          "type": "string"
+        },
+        "price":
+        {
+          "type": "number"
+        }
+      },
+      "required": ["productID", "name", "price"]
     }
   }
 }
