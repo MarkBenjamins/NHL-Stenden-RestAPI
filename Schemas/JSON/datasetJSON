@@ -7,7 +7,7 @@
   "additionalProperties": false,
   "properties":
   {
-    // Sales
+
     "sales":
     {
       "$id": "#sales",
@@ -17,7 +17,6 @@
         "$ref": "#sale"
       }
     },
-
     "sale":
     {
       "$id": "#sale",
@@ -49,7 +48,6 @@
       "required": ["salesID", "salesPersonalID", "customerID", "productID", "quantity"]
     },
 
-    // Employees
     "employees":
     {
       "$id": "#employees",
@@ -59,7 +57,6 @@
         "$ref": "#employee"
       }
     },
-
     "employee":
     {
       "$id": "#employee",
@@ -87,7 +84,6 @@
       "required": ["first_name", "last_name"]
     },
 
-    // Customers
     "customers":
     {
       "$id": "#customers",
@@ -97,7 +93,6 @@
         "$ref": "#customer"
       }
     },
-
     "customer":
     {
       "$id": "#customer",
@@ -125,7 +120,6 @@
       "required": ["first_name", "last_name"]
     },
 
-    // Products
      "products":
     {
       "$id": "#products",
@@ -135,7 +129,6 @@
         "$ref": "#product"
       }
     },
-
     "product":
     {
       "$id": "#product",
