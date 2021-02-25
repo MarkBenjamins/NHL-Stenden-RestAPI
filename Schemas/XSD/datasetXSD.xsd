@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:element name="sales">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element ref="sale" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+<xs:element name="sale">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="salesID" type="xs:integer"/>
+      <xs:element name="salesPersonID" type="xs:string"/>
+      <xs:element name="customerID" type="xs:string"/>
+      <xs:element name="productID" type="xs:string"/>
+      <xs:element name="quantity" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="employees">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element ref="employee" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+<xs:element name="employee">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="employeeID" type="xs:integer"/>
+      <xs:element name="first_name" type="xs:string"/>
+      <xs:element name="middle_initial" type="xs:string"/>
+      <xs:element name="last_name" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="customers">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element ref="customer" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+<xs:element name="customer">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="customerID" type="xs:integer"/>
+      <xs:element name="first_name" type="xs:string"/>
+      <xs:element name="middle_initial" type="xs:string"/>
+      <xs:element name="last_name" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+<xs:element name="products">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element ref="customer" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+<xs:element name="product">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="customerID" type="xs:integer"/>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="price" type="xs:decimal"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+</xs:schema>
