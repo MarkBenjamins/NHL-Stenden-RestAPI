@@ -4,9 +4,19 @@ from flask_restful import Api, Resource
 app = Flask(__name__)
 api = Api(app)
 
-# Debug function enabled
-# if __name__ == "__main__":
-#    app.run(debug=True)
+sales = {
+        "1": {"Employee": "Mark", "Customer": "Pieter Post", "Product": "Kattenvoer"}
+        }
+
+class Sale(Resource):
+    def get(self, sale):
+        return sales[sale]
+
+    def post(self):
+        return {"data": "posted"}
+
+api.add_resource(Sale, "/Sale/<string:sale>")
+
 
 # The home page
 @app.route('/')
@@ -33,7 +43,13 @@ def Product(productID):
 def Customers():
     return "<h1> Customers page </1>"
 
-if __name__ == '__main__':
-    app.run()
+
+# Debug function enabled
+if __name__ == "__main__":
+    app.run(debug=True)
+
+
+#if __name__ == '__main__':
+ #   app.run()
 
 
