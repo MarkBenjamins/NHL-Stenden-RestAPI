@@ -6,7 +6,7 @@ import jsonschema
 
 def is_valid_xml(xml):
     dirname = os.path.dirname(__file__)
-    filename = os.path.join(dirname, "../Schemas/datasetXSD.xsd")
+    filename = os.path.join(dirname, "../Schemas/XSD/datasetXSD.xsd")
     xsd = XMLSchema(etree.parse(filename))
     xml_object = etree.fromstring(xml)
     return xsd.validate(xml_object)
@@ -14,7 +14,7 @@ def is_valid_xml(xml):
 
 def is_valid_json(json_string):
     dirname = os.path.dirname(__file__)
-    filename = os.path.join(dirname, "../schemas/dataset.schema.json")
+    filename = os.path.join(dirname, "../Schemas/JSON/datasetJSON.json")
     with open(filename) as f:
         try:
             schema = json.load(f)

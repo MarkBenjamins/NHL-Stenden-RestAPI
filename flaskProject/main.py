@@ -3,11 +3,10 @@ from flask import Flask, redirect, url_for, render_template, request, jsonify, R
 import xmltodict
 import uuid
 import validator
-#import json
+import json
 
 
 app = Flask(__name__)
-api = Api(app)
 
 #if __name__ == '__main__':
  #   app.run()
@@ -32,9 +31,6 @@ customers = [
             {"firstName": "karel", "middleInitial": "", "lastName": "Bos"}
            ]
 
-
-
-
 ############################ Homepage ################################
 # The home page
 @app.route('/')
@@ -56,18 +52,27 @@ def postProducts():
     # als het XML is
     if content == "application/xml":
         xmlData = xmltodict.parse(request.data)
-        xmlData["id"] = uuid.uuid4()
-        products.append(xmlData)
-        return xmlData
+        is_valid = validator.is_valid_xml(xmlData)
+        if is_valid:
+            xmlData["id"] = uuid.uuid4()
+            products.append(xmlData)
+            return xmlData
+        else:
+            return abort(400)   # error code 400
 
     # als het JSON is
     else:
         if not request.json:
-            abort(400)  # error als foutmelding
-        jsonData = request.json
-        jsonData["id"] = uuid.uuid4()
-        products.append(jsonData)
-        return jsonData
+            return abort(400)          # error code 400
+        else:
+            jsonData = request.json
+            is_valid = validator.is_valid_xml(jsonData)
+            if is_valid:
+                jsonData["id"] = uuid.uuid4()
+                products.append(jsonData)
+                return jsonData
+            else:
+                return abort(400)  # error code 400
 
 # PUT the product
 @app.route('/products/<id>', methods=['PUT'])
