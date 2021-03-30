@@ -1,49 +1,50 @@
-from flask import Flask, redirect, url_for, render_template, request, jsonify, Response, abort
+from flask import Flask, render_template, request, jsonify, Response, abort
 
 import xmltodict
 import uuid
 import validator
 import json
 
-
 app = Flask(__name__)
 
-#if __name__ == '__main__':
- #   app.run()
+# if __name__ == '__main__':
+#   app.run()
 
-#Data
+# Data
 products = [
-            {"id": 1, "name": "kattenvoer", "price": 1.25},
-            {"id": 2, "name": "hondenvoer", "price": 1.25}
-           ]
+    {"productID": 1, "name": "cat food", "price": 1.25},
+    {"productID": 2, "name": "dog food", "price": 1.25}
+]
 
-#todo find out how je de ids kan pakken van de andere setes
-sales =    [
-#            {"productID": product<id>, "productID": product<id>,"quantity": 5}
-           ]
+sales = [
+    {"salesID": 1, "salesPersonalID": 200, "customerID": 301, "productID": 1, "quantity": 5}
+]
 
 employees = [
-            {"firstName": "Mark", "middleInitial": "", "lastName": "Benjamins"},
-            {"firstName": "Niels", "middleInitial": "", "lastName": "Benjamins"}
-           ]
+    {"EmployeeID": 100, "firstName": "Mark", "middleInitial": "", "lastName": "Benjamins"},
+    {"EmployeeID": 101, "firstName": "Niels", "middleInitial": "", "lastName": "Benjamins"}
+]
 
 customers = [
-            {"firstName": "karel", "middleInitial": "", "lastName": "Bos"}
-           ]
+    {"customerID": 10, "firstName": "karel", "middleInitial": "", "lastName": "Bos"}
+]
+
 
 ############################ Homepage ################################
 # The home page
-@app.route('/')
+@app.route('/', methods=['GET'])
 def home():
-    return render_template("home.html")
+    return render_template("Home.html")
 
 
 ############################ Product ################################
 # GET the product
 @app.route('/products', methods=['GET'])
-def getProducts(): # Lijst van de producten
-    return jsonify(products) # maakt een JSON van producten
+def getProducts():
+    return jsonify(products)  # Products to JSON file
 
+
+# todo validatie goed maken dat hij wel door laat
 # POST the product
 @app.route('/products', methods=['POST'])
 def postProducts():
@@ -54,56 +55,57 @@ def postProducts():
         xmlData = xmltodict.parse(request.data)
         is_valid = validator.is_valid_xml(xmlData)
         if is_valid:
-            xmlData["id"] = uuid.uuid4()
+            xmlData["productID"] = uuid.uuid4()
             products.append(xmlData)
             return xmlData
         else:
-            return abort(400)   # error code 400
+            abort(400)  # error code 400
 
     # als het JSON is
     else:
         if not request.json:
-            return abort(400)          # error code 400
+            abort(400)  # error code 400
         else:
             jsonData = request.json
-            is_valid = validator.is_valid_xml(jsonData)
+            is_valid = validator.is_valid_json(json.dumps(jsonData))
             if is_valid:
-                jsonData["id"] = uuid.uuid4()
+                jsonData["productID"] = uuid.uuid4()
                 products.append(jsonData)
                 return jsonData
             else:
-                return abort(400)  # error code 400
+                abort(400)  # error code 400
+
 
 # PUT the product
-@app.route('/products/<id>', methods=['PUT'])
+@app.route('/products/<productID>', methods=['PUT'])
 def putProducts():
     content = request.headers.get('Content-Type')
-    id = request.view_args['id']
+    id = request.view_args['productID']
 
-#todo afmaken
+    # todo afmaken
     for product in products:
-        if product["id"] == id:
+        if product["productID"] == id:
 
             # als het XML is
             if content == "application/xml":
                 xmlData = xmltodict.parse(request.data)
-                xmlData["id"] = id # zet het ID vast
-                index = products.index(product) # bepaald de rij die geupdate word
+                xmlData["productID"] = id  # zet het ID vast
+                index = products.index(product)  # bepaald de rij die geupdate word
                 products[index] = xmlData
                 return xmlData
 
             # als het JSON is
-# todo validatie
+            # todo validatie
             else:
                 if not request.json:
                     abort(400)  # error als foutmelding
                 jsonData = request.json
-                jsonData["id"] = uuid.uuid4()
+                jsonData["productID"] = uuid.uuid4()
                 products.append(jsonData)
                 return jsonData
 
 
-#DELET the product
+# DELETE the product
 @app.route('/products/<id>', methods=['DELETE'])
 def delProducts(id):
     response = Response()
@@ -119,9 +121,10 @@ def delProducts(id):
 ############################ Sale #####################################
 # GET the sale
 @app.route('/sales', methods=['GET'])
-def getSales(): # Lijst van de sales
-    return jsonify(sales) # maakt een JSON van sales
-    #todo fix the sales dataset
+def getSales():  # Lijst van de sales
+    return jsonify(sales)  # maakt een JSON van sales
+    # todo fix the sales dataset
+
 
 # POST the sale
 @app.route('/sales', methods=['POST'])
@@ -144,11 +147,33 @@ def postSales():
         products.append(jsonData)
         return jsonData
 
+
+# PUT the sale #todo afmaken
+# @app.route('/sales/<id>', methods=['PUT'])
+# def putSales():
+#     content = request.headers.get('Content-Type')
+#     id = request.view_args['id']
+
+
+# DELETE the sale
+@app.route('/sales/<id>', methods=['DELETE'])
+def delSales(id):
+    response = Response()
+    for sale in sales:
+        if sale["id"] == int(id):
+            sales.remove(sale)
+            response.status_code = 200
+        else:
+            response.status_code = 404
+    return response
+
+
 ############################ Employees ################################
 # GET the employee
 @app.route('/employees', methods=['GET'])
-def getEmployees(): # Lijst van de employees
-    return jsonify(employees) # maakt een JSON van employees
+def getEmployees():  # Lijst van de employees
+    return jsonify(employees)  # maakt een JSON van employees
+
 
 # POST the employee
 @app.route('/employees', methods=['POST'])
@@ -171,11 +196,26 @@ def postEmployees():
         products.append(jsonData)
         return jsonData
 
+
+# DELETE the employee
+@app.route('/employees/<id>', methods=['DELETE'])
+def delEmployees(id):
+    response = Response()
+    for employee in employees:
+        if employee["id"] == int(id):
+            employees.remove(employee)
+            response.status_code = 200
+        else:
+            response.status_code = 404
+    return response
+
+
 ############################ Customers ################################
 # GET the customer
 @app.route('/customers', methods=['GET'])
-def getCustomers(): # Lijst van de customers
-    return jsonify(customers) # maakt een JSON van customers
+def getCustomers():  # Lijst van de customers
+    return jsonify(customers)  # maakt een JSON van customers
+
 
 # POST the customer
 @app.route('/customers', methods=['POST'])
@@ -199,12 +239,20 @@ def postCustomers():
         return jsonData
 
 
+# DELETE the customers
+@app.route('/customers/<id>', methods=['DELETE'])
+def delcustomers(id):
+    response = Response()
+    for customer in customers:
+        if customer["id"] == int(id):
+            customers.remove(customer)
+            response.status_code = 200
+        else:
+            response.status_code = 404
+    return response
+
+
 #######################################################################
 # Debug function enabled
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-
-
-
