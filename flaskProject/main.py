@@ -1,21 +1,24 @@
-from flask import Flask, redirect, url_for, render_template, request, jsonify
-from flask_restful import Api, Resource, abort
+from flask import Flask, redirect, url_for, render_template, request, jsonify, Response, abort
 
 import xmltodict
 import uuid
+import validator
+#import json
 
-#
+
 app = Flask(__name__)
 api = Api(app)
 
+#if __name__ == '__main__':
+ #   app.run()
 
 #Data
 products = [
-            {"name": 'kattenvoer', "price": 1.25},
-            {"name": 'hondenvoer', "price": 1.25}
+            {"id": 1, "name": "kattenvoer", "price": 1.25},
+            {"id": 2, "name": "hondenvoer", "price": 1.25}
            ]
 
-#todo vind uit hoe je de ids pakt van de andere setes
+#todo find out how je de ids kan pakken van de andere setes
 sales =    [
 #            {"productID": product<id>, "productID": product<id>,"quantity": 5}
            ]
@@ -31,23 +34,15 @@ customers = [
 
 
 
-# class Sale(Resource):
-#     def get(self, sale):
-#         return sales[sale]
-#
-#     def post(self):
-#         return {"data": "posted"}
-#
-# api.add_resource(Sale, "/sale/<string:sale>")
 
-
+############################ Homepage ################################
 # The home page
 @app.route('/')
 def home():
     return render_template("home.html")
 
-############################ Product ################################
 
+############################ Product ################################
 # GET the product
 @app.route('/products', methods=['GET'])
 def getProducts(): # Lijst van de producten
@@ -80,7 +75,7 @@ def putProducts():
     content = request.headers.get('Content-Type')
     id = request.view_args['id']
 
-#todo
+#todo afmaken
     for product in products:
         if product["id"] == id:
 
@@ -88,7 +83,7 @@ def putProducts():
             if content == "application/xml":
                 xmlData = xmltodict.parse(request.data)
                 xmlData["id"] = id # zet het ID vast
-                index = products.index(product) # bepaald de rijd die geupdate word
+                index = products.index(product) # bepaald de rij die geupdate word
                 products[index] = xmlData
                 return xmlData
 
@@ -102,11 +97,26 @@ def putProducts():
                 products.append(jsonData)
                 return jsonData
 
+
+#DELET the product
+@app.route('/products/<id>', methods=['DELETE'])
+def delProducts(id):
+    response = Response()
+    for product in products:
+        if product["id"] == int(id):
+            products.remove(product)
+            response.status_code = 200
+        else:
+            response.status_code = 404
+    return response
+
+
 ############################ Sale #####################################
 # GET the sale
 @app.route('/sales', methods=['GET'])
 def getSales(): # Lijst van de sales
     return jsonify(sales) # maakt een JSON van sales
+    #todo fix the sales dataset
 
 # POST the sale
 @app.route('/sales', methods=['POST'])
@@ -134,7 +144,6 @@ def postSales():
 @app.route('/employees', methods=['GET'])
 def getEmployees(): # Lijst van de employees
     return jsonify(employees) # maakt een JSON van employees
-#todo make een JSON met de data van employees
 
 # POST the employee
 @app.route('/employees', methods=['POST'])
@@ -162,7 +171,6 @@ def postEmployees():
 @app.route('/customers', methods=['GET'])
 def getCustomers(): # Lijst van de customers
     return jsonify(customers) # maakt een JSON van customers
-#todo make een JSON met de data van customers
 
 # POST the customer
 @app.route('/customers', methods=['POST'])
@@ -192,7 +200,6 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 
-#if __name__ == '__main__':
- #   app.run()
+
 
 
