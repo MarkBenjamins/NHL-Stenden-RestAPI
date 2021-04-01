@@ -60,15 +60,21 @@ def getProductsWithID():
         if int(productInput) > 0 and int(productInput) < 4:
             for product in products:
                 if product["productID"] == int(productInput):
-                    a = render_template("product.html", productID=product["productID"], name=product["name"], price=product["price"])
-                    return a
+                    pro = product["productID"]
+                    name = product["name"]
+                    price = product["price"]
+                    output = render_template("product.html",
+                                             productID=pro,
+                                             name=name,
+                                             price=price, note="yes")
+                    return output
         else:
-            a = render_template("product.html", productID="Geen resultaat")
-            return a
+            output = render_template("product.html", noresult="Geen resultaat")
+            return output
 
     else:
-        a = render_template("product.html")
-        return a
+        output = render_template("product.html")
+        return output
 
 
 ###
