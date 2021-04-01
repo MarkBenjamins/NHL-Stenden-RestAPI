@@ -6,17 +6,11 @@
   <h1>Get product info by EmployeeID</h1>
   <div>
     <label>Put in employee ID</label>
-    <input
-      type="number"
-      class="form-control"
-      id="employeeInput"
-      name="employeeInput"
-      placeholder="Enter 100,101 or 102"
-    />
+    <input type="number" name="employeeInput" placeholder="Enter 100, 101 or 102"/>
   </div>
 
 <br>
-<!-- respons on the input-->
+  <!-- respons on the input-->
   {%if result == "yes"%}
   <p>Employee ID: {{ employeeID }}</p>
   <p>First name: {{ fname }}</p>
@@ -24,12 +18,10 @@
   <p>Last name: {{ lname }}</p>
   {%endif%}
 
-<!-- no respons on the input-->
+  <!-- no respons on the input-->
   {{noresult}}
 
-<br>
-<br>
-
+  <br><br>
   <button type="submit">Zoek</button>
 </form>
 

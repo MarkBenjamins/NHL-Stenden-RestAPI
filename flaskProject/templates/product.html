@@ -6,29 +6,21 @@
   <h1>Get product info by ProductID</h1>
   <div>
     <label>Put in product ID</label>
-    <input
-      type="number"
-      class="form-control"
-      id="productInput"
-      name="productInput"
-      placeholder="Enter 1,2 or 3"
-    />
+    <input type="number" name="productInput" placeholder="Enter 1, 2 or 3"/>
   </div>
 
-<br>
-<!-- respons on the input-->
+  <br>
+  <!-- respons on the input-->
   {%if result == "yes"%}
   <p>Product ID: {{ productID }}</p>
   <p>Name: {{ name }}</p>
   <p>Price: {{ price }}</p>
   {%endif%}
 
-<!-- no respons on the input-->
+  <!-- no respons on the input-->
   {{noresult}}
 
-<br>
-<br>
-
+  <br><br>
   <button type="submit">Zoek</button>
 </form>
 

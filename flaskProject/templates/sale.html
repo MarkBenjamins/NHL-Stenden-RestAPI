@@ -6,17 +6,10 @@
   <h1>Get product info by SalesID</h1>
   <div>
     <label>Put in sale ID</label>
-    <input
-      type="number"
-      class="form-control"
-      id="saleInput"
-      name="saleInput"
-      placeholder="Enter 21, 22 or 23"
-    />
+    <input type="number" name="saleInput" placeholder="Enter 21, 22 or 23"/>
   </div>
-
-<br>
-<!-- respons on the input-->
+  <br>
+  <!-- respons on the input-->
   {%if result == "yes"%}
   <p>Sale ID: {{ salesID }}</p>
   <p>Sale Personal ID: {{ spID }}</p>
@@ -25,12 +18,10 @@
   <p>Quantity: {{ qua }}</p>
   {%endif%}
 
-<!-- no respons on the input-->
+  <!-- no respons on the input-->
   {{noresult}}
 
-<br>
-<br>
-
+  <br><br>
   <button type="submit">Zoek</button>
 </form>
 

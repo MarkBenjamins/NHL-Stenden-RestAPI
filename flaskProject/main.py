@@ -1,18 +1,11 @@
-from flask import Flask, render_template, request, jsonify, Response, abort, Blueprint
-from flaskProject import create_app
+from flask import Flask, render_template, request, jsonify, Response, abort
 
 import xmltodict
 import uuid
 import validator
 import json
 
-auth = Blueprint('auth', __name__)
-
 app = Flask(__name__)
-app1 = create_app()
-
-# if __name__ == '__main__':
-#   app.run()
 
 # Data
 products = [
@@ -29,11 +22,11 @@ employees = [
 
 customers = [
     {"customerID": 10, "firstName": "Karel", "middleInitial": "", "lastName": "Bos"},
-    {"customerID": 11, "firstName": "Jan", "middleInitial": "", "lastName": "Klassen"},
+    {"customerID": 11, "firstName": "Jan", "middleInitial": "", "lastName": "Pieter"},
     {"customerID": 12, "firstName": "Bert", "middleInitial": "en", "lastName": "Ernie"}
 ]
 sales = [
-    {"salesID": 21, "salePersonalID": 211, "customerID": 201, "productID": 31, "quantity": 75},
+    {"salesID": 21, "salesPersonalID": 211, "customerID": 201, "productID": 31, "quantity": 75},
     {"salesID": 22, "salesPersonalID": 206, "customerID": 303, "productID": 6, "quantity": 5},
     {"salesID": 23, "salesPersonalID": 207, "customerID": 303, "productID": 8, "quantity": 5}
 ]
@@ -50,7 +43,7 @@ def home():
 # GET the products
 @app.route('/products', methods=['GET'])
 def getProducts():
-    return jsonify(products)  # Products to JSON file
+    return jsonify(products)
 
 
 # GET the product with ID
@@ -72,15 +65,16 @@ def getProductWithID():
                                              result="yes")
                     return output
         else:
-            output = render_template("product.html", noresult="Geen resultaat")
+            output = render_template("product.html", noresult="No result")
             return output
 
     else:
         output = render_template("product.html")
         return output
 
-# todo validatie goed maken dat hij wel door laat
+
 # POST the product
+# todo validation
 @app.route('/products', methods=['POST'])
 def postProducts():
     content = request.headers.get('Content-Type')
@@ -112,28 +106,27 @@ def postProducts():
 
 
 # PUT the product
+# todo validation
 @app.route('/products/<productID>', methods=['PUT'])
 def putProducts():
     content = request.headers.get('Content-Type')
-    id = request.view_args['productID']
+    pid = request.view_args['productID']
 
-    # todo afmaken
     for product in products:
-        if product["productID"] == id:
+        if product["productID"] == pid:
 
             # als het XML is
             if content == "application/xml":
                 xmlData = xmltodict.parse(request.data)
-                xmlData["productID"] = id  # zet het ID vast
-                index = products.index(product)  # bepaald de rij die geupdate word
+                xmlData["productID"] = pid
+                index = products.index(product)
                 products[index] = xmlData
                 return xmlData
 
             # als het JSON is
-            # todo validatie
             else:
                 if not request.json:
-                    abort(400)  # error als foutmelding
+                    abort(400)
                 jsonData = request.json
                 jsonData["productID"] = uuid.uuid4()
                 products.append(jsonData)
@@ -141,11 +134,11 @@ def putProducts():
 
 
 # DELETE the product
-@app.route('/products/<id>', methods=['DELETE'])
-def delProducts(id):
+@app.route('/products/<pid>', methods=['DELETE'])
+def delProducts(pid):
     response = Response()
     for product in products:
-        if product["id"] == int(id):
+        if product["productID"] == int(pid):
             products.remove(product)
             response.status_code = 200
         else:
@@ -156,16 +149,16 @@ def delProducts(id):
 ############################ Employees ################################
 # GET the employees
 @app.route('/employees', methods=['GET'])
-def getEmployees():  # Lijst van de employees
-    return jsonify(employees)  # maakt een JSON van employees
+def getEmployees():
+    return jsonify(employees)
 
 
 # GET the employee with ID
 @app.route('/employee', methods=["GET", "POST"])
-def getEmplyeeWithID():
+def getEmployeeWithID():
     if request.method == "POST":
         employeeInput = request.form.get('employeeInput')
-        #todo dont use hardcode validate
+        # todo dont use hardcode validate
         if int(employeeInput) > 99 and int(employeeInput) < 103:
             for employee in employees:
                 if employee["employeeID"] == int(employeeInput):
@@ -181,7 +174,7 @@ def getEmplyeeWithID():
                                              result="yes")
                     return output
         else:
-            output = render_template("employee.html", noresult="Geen resultaat")
+            output = render_template("employee.html", noresult="No result")
             return output
 
     else:
@@ -197,26 +190,54 @@ def postEmployees():
     # als het XML is
     if content == "application/xml":
         xmlData = xmltodict.parse(request.data)
-        xmlData["id"] = uuid.uuid4()
+        xmlData["employeeID"] = uuid.uuid4()
         products.append(xmlData)
         return xmlData
 
     # als het JSON is
     else:
         if not request.json:
-            abort(400)  # error als foutmelding
+            abort(400)
         jsonData = request.json
-        jsonData["id"] = uuid.uuid4()
+        jsonData["employeeID"] = uuid.uuid4()
         products.append(jsonData)
         return jsonData
 
 
+# PUT the employee
+# todo validation
+@app.route('/employees/<employeeID>', methods=['PUT'])
+def putEmployees():
+    content = request.headers.get('Content-Type')
+    eid = request.view_args['employeeID']
+
+    for employee in employees:
+        if employee["employeeID"] == eid:
+
+            # als het XML is
+            if content == "application/xml":
+                xmlData = xmltodict.parse(request.data)
+                xmlData["employeeID"] = eid
+                index = employees.index(employee)
+                employees[index] = xmlData
+                return xmlData
+
+            # als het JSON is
+            else:
+                if not request.json:
+                    abort(400)
+                jsonData = request.json
+                jsonData["employeeID"] = uuid.uuid4()
+                employees.append(jsonData)
+                return jsonData
+
+
 # DELETE the employee
-@app.route('/employees/<id>', methods=['DELETE'])
-def delEmployees(id):
+@app.route('/employees/<employeeID>', methods=['DELETE'])
+def delEmployees(employeeID):
     response = Response()
     for employee in employees:
-        if employee["id"] == int(id):
+        if employee["employeeID"] == int(employeeID):
             employees.remove(employee)
             response.status_code = 200
         else:
@@ -227,8 +248,8 @@ def delEmployees(id):
 ############################ Customers ################################
 # GET the customer
 @app.route('/customers', methods=['GET'])
-def getCustomers():  # Lijst van de customers
-    return jsonify(customers)  # maakt een JSON van customers
+def getCustomers():
+    return jsonify(customers)
 
 
 # GET the customer with ID
@@ -236,7 +257,7 @@ def getCustomers():  # Lijst van de customers
 def getCustomerWithID():
     if request.method == "POST":
         customerInput = request.form.get('customerInput')
-        #todo dont use hardcode validate
+        # todo dont use hardcode validate
         if int(customerInput) > 9 and int(customerInput) < 13:
             for customer in customers:
                 if customer["customerID"] == int(customerInput):
@@ -252,7 +273,7 @@ def getCustomerWithID():
                                              result="yes")
                     return output
         else:
-            output = render_template("customer.html", noresult="Geen resultaat")
+            output = render_template("customer.html", noresult="No result")
             return output
 
     else:
@@ -268,47 +289,74 @@ def postCustomers():
     # als het XML is
     if content == "application/xml":
         xmlData = xmltodict.parse(request.data)
-        xmlData["id"] = uuid.uuid4()
+        xmlData["customerID"] = uuid.uuid4()
         products.append(xmlData)
         return xmlData
 
     # als het JSON is
     else:
         if not request.json:
-            abort(400)  # error als foutmelding
+            abort(400)
         jsonData = request.json
-        jsonData["id"] = uuid.uuid4()
+        jsonData["customerID"] = uuid.uuid4()
         products.append(jsonData)
         return jsonData
 
 
+# PUT the customer
+# todo validation
+@app.route('/customers/<customerID>', methods=['PUT'])
+def putCustomers():
+    content = request.headers.get('Content-Type')
+    cid = request.view_args['customerID']
+
+    for customer in customers:
+        if customer["customerID"] == cid:
+
+            # als het XML is
+            if content == "application/xml":
+                xmlData = xmltodict.parse(request.data)
+                xmlData["customerID"] = cid
+                index = customers.index(customer)
+                customers[index] = xmlData
+                return xmlData
+
+            # als het JSON is
+            else:
+                if not request.json:
+                    abort(400)
+                jsonData = request.json
+                jsonData["customerID"] = uuid.uuid4()
+                customers.append(jsonData)
+                return jsonData
+
+
 # DELETE the customers
-@app.route('/customers/<id>', methods=['DELETE'])
-def delcustomers(id):
+@app.route('/customers/<customerID>', methods=['DELETE'])
+def delCustomers(customerID):
     response = Response()
     for customer in customers:
-        if customer["id"] == int(id):
+        if customer["customerID"] == int(customerID):
             customers.remove(customer)
             response.status_code = 200
         else:
             response.status_code = 404
     return response
 
+
 ############################ Sale #####################################
 # GET the sale
 @app.route('/sales', methods=['GET'])
-def getSales():  # Lijst van de sales
-    return jsonify(sales)  # maakt een JSON van sales
-    # todo fix the sales dataset
+def getSales():
+    return jsonify(sales)
 
-###
-#todo make it work
+
 # GET the sale with ID
 @app.route('/sale', methods=["GET", "POST"])
 def getSaleWithID():
     if request.method == "POST":
         saleInput = request.form.get('saleInput')
-        #todo dont use hardcode validate
+        # todo dont use hardcode validate
         if int(saleInput) > 20 and int(saleInput) < 24:
             for sale in sales:
                 if sale["salesID"] == int(saleInput):
@@ -326,14 +374,42 @@ def getSaleWithID():
                                              result="yes")
                     return output
         else:
-            output = render_template("sale.html", noresult="Geen resultaat")
+            output = render_template("sale.html", noresult="No result")
             return output
 
     else:
         output = render_template("sale.html")
         return output
 
-####
+
+# PUT the sale
+# todo validation
+@app.route('/sales/<saleID>', methods=['PUT'])
+def putSales():
+    content = request.headers.get('Content-Type')
+    cid = request.view_args['saleID']
+
+    for sale in sales:
+        if sale["saleID"] == cid:
+
+            # als het XML is
+            if content == "application/xml":
+                xmlData = xmltodict.parse(request.data)
+                xmlData["saleID"] = cid
+                index = customers.index(sale)
+                sale[index] = xmlData
+                return xmlData
+
+            # als het JSON is
+            else:
+                if not request.json:
+                    abort(400)
+                jsonData = request.json
+                jsonData["saleID"] = uuid.uuid4()
+                sale.append(jsonData)
+                return jsonData
+
+
 # POST the sale
 @app.route('/sales', methods=['POST'])
 def postSales():
@@ -342,42 +418,31 @@ def postSales():
     # als het XML is
     if content == "application/xml":
         xmlData = xmltodict.parse(request.data)
-        xmlData["id"] = uuid.uuid4()
+        xmlData["salesID"] = uuid.uuid4()
         products.append(xmlData)
         return xmlData
 
     # als het JSON is
     else:
         if not request.json:
-            abort(400)  # error als foutmelding
+            abort(400)
         jsonData = request.json
-        jsonData["id"] = uuid.uuid4()
+        jsonData["salesID"] = uuid.uuid4()
         products.append(jsonData)
         return jsonData
 
 
-# PUT the sale #todo afmaken
-# @app.route('/sales/<id>', methods=['PUT'])
-# def putSales():
-#     content = request.headers.get('Content-Type')
-#     id = request.view_args['id']
-
-
 # DELETE the sale
-@app.route('/sales/<id>', methods=['DELETE'])
-def delSales(id):
+@app.route('/sales/<salesID>', methods=['DELETE'])
+def delSales(salesID):
     response = Response()
     for sale in sales:
-        if sale["id"] == int(id):
+        if sale["salesID"] == int(salesID):
             sales.remove(sale)
             response.status_code = 200
         else:
             response.status_code = 404
     return response
-
-
-############################ TEST CODE #######################################
-
 
 
 # Debug function enabled
