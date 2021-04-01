@@ -21,17 +21,21 @@ products = [
     {"productID": 3, "name": "guinea pig food", "price": 12.00}
 ]
 
-sales = [
-    {"salesID": 1, "salesPersonalID": 200, "customerID": 301, "productID": 1, "quantity": 5}
-]
-
 employees = [
-    {"EmployeeID": 100, "firstName": "Mark", "middleInitial": "", "lastName": "Benjamins"},
-    {"EmployeeID": 101, "firstName": "Niels", "middleInitial": "", "lastName": "Benjamins"}
+    {"employeeID": 100, "firstName": "Pieter", "middleInitial": "", "lastName": "Post"},
+    {"employeeID": 101, "firstName": "Jannie", "middleInitial": "", "lastName": "Post"},
+    {"employeeID": 102, "firstName": "Jannes", "middleInitial": "", "lastName": "Post"}
 ]
 
 customers = [
-    {"customerID": 10, "firstName": "karel", "middleInitial": "", "lastName": "Bos"}
+    {"customerID": 10, "firstName": "Karel", "middleInitial": "", "lastName": "Bos"},
+    {"customerID": 11, "firstName": "Jan", "middleInitial": "", "lastName": "Klassen"},
+    {"customerID": 12, "firstName": "Bert", "middleInitial": "en", "lastName": "Ernie"}
+]
+sales = [
+    {"salesID": 21, "salePersonalID": 211, "customerID": 201, "productID": 31, "quantity": 75},
+    {"salesID": 22, "salesPersonalID": 206, "customerID": 303, "productID": 6, "quantity": 5},
+    {"salesID": 23, "salesPersonalID": 207, "customerID": 303, "productID": 8, "quantity": 5}
 ]
 
 
@@ -43,19 +47,17 @@ def home():
 
 
 ############################ Product ################################
-# GET the product
+# GET the products
 @app.route('/products', methods=['GET'])
 def getProducts():
     return jsonify(products)  # Products to JSON file
 
 
-###
-# todo fix this man
-# GET the product of the ID
+# GET the product with ID
 @app.route('/product', methods=["GET", "POST"])
-def getProductsWithID():
+def getProductWithID():
     if request.method == "POST":
-        # user input number
+        # todo dont use hardcode validate
         productInput = request.form.get('productInput')
         if int(productInput) > 0 and int(productInput) < 4:
             for product in products:
@@ -66,7 +68,8 @@ def getProductsWithID():
                     output = render_template("product.html",
                                              productID=pro,
                                              name=name,
-                                             price=price, result="yes")
+                                             price=price,
+                                             result="yes")
                     return output
         else:
             output = render_template("product.html", noresult="Geen resultaat")
@@ -75,9 +78,6 @@ def getProductsWithID():
     else:
         output = render_template("product.html")
         return output
-
-
-###
 
 # todo validatie goed maken dat hij wel door laat
 # POST the product
@@ -153,61 +153,40 @@ def delProducts(id):
     return response
 
 
-############################ Sale #####################################
-# GET the sale
-@app.route('/sales', methods=['GET'])
-def getSales():  # Lijst van de sales
-    return jsonify(sales)  # maakt een JSON van sales
-    # todo fix the sales dataset
-
-
-# POST the sale
-@app.route('/sales', methods=['POST'])
-def postSales():
-    content = request.headers.get('Content-Type')
-
-    # als het XML is
-    if content == "application/xml":
-        xmlData = xmltodict.parse(request.data)
-        xmlData["id"] = uuid.uuid4()
-        products.append(xmlData)
-        return xmlData
-
-    # als het JSON is
-    else:
-        if not request.json:
-            abort(400)  # error als foutmelding
-        jsonData = request.json
-        jsonData["id"] = uuid.uuid4()
-        products.append(jsonData)
-        return jsonData
-
-
-# PUT the sale #todo afmaken
-# @app.route('/sales/<id>', methods=['PUT'])
-# def putSales():
-#     content = request.headers.get('Content-Type')
-#     id = request.view_args['id']
-
-
-# DELETE the sale
-@app.route('/sales/<id>', methods=['DELETE'])
-def delSales(id):
-    response = Response()
-    for sale in sales:
-        if sale["id"] == int(id):
-            sales.remove(sale)
-            response.status_code = 200
-        else:
-            response.status_code = 404
-    return response
-
-
 ############################ Employees ################################
-# GET the employee
+# GET the employees
 @app.route('/employees', methods=['GET'])
 def getEmployees():  # Lijst van de employees
     return jsonify(employees)  # maakt een JSON van employees
+
+
+# GET the employee with ID
+@app.route('/employee', methods=["GET", "POST"])
+def getEmplyeeWithID():
+    if request.method == "POST":
+        employeeInput = request.form.get('employeeInput')
+        #todo dont use hardcode validate
+        if int(employeeInput) > 99 and int(employeeInput) < 103:
+            for employee in employees:
+                if employee["employeeID"] == int(employeeInput):
+                    employeeID = employee["employeeID"]
+                    fname = employee["firstName"]
+                    mname = employee["middleInitial"]
+                    lname = employee["lastName"]
+                    output = render_template("employee.html",
+                                             employeeID=employeeID,
+                                             fname=fname,
+                                             mname=mname,
+                                             lname=lname,
+                                             result="yes")
+                    return output
+        else:
+            output = render_template("employee.html", noresult="Geen resultaat")
+            return output
+
+    else:
+        output = render_template("employee.html")
+        return output
 
 
 # POST the employee
@@ -252,6 +231,35 @@ def getCustomers():  # Lijst van de customers
     return jsonify(customers)  # maakt een JSON van customers
 
 
+# GET the customer with ID
+@app.route('/customer', methods=["GET", "POST"])
+def getCustomerWithID():
+    if request.method == "POST":
+        customerInput = request.form.get('customerInput')
+        #todo dont use hardcode validate
+        if int(customerInput) > 9 and int(customerInput) < 13:
+            for customer in customers:
+                if customer["customerID"] == int(customerInput):
+                    customerID = customer["customerID"]
+                    fname = customer["firstName"]
+                    mname = customer["middleInitial"]
+                    lname = customer["lastName"]
+                    output = render_template("customer.html",
+                                             customerID=customerID,
+                                             fname=fname,
+                                             mname=mname,
+                                             lname=lname,
+                                             result="yes")
+                    return output
+        else:
+            output = render_template("customer.html", noresult="Geen resultaat")
+            return output
+
+    else:
+        output = render_template("customer.html")
+        return output
+
+
 # POST the customer
 @app.route('/customers', methods=['POST'])
 def postCustomers():
@@ -286,23 +294,90 @@ def delcustomers(id):
             response.status_code = 404
     return response
 
+############################ Sale #####################################
+# GET the sale
+@app.route('/sales', methods=['GET'])
+def getSales():  # Lijst van de sales
+    return jsonify(sales)  # maakt een JSON van sales
+    # todo fix the sales dataset
+
+###
+#todo make it work
+# GET the sale with ID
+@app.route('/sale', methods=["GET", "POST"])
+def getSaleWithID():
+    if request.method == "POST":
+        saleInput = request.form.get('saleInput')
+        #todo dont use hardcode validate
+        if int(saleInput) > 20 and int(saleInput) < 24:
+            for sale in sales:
+                if sale["salesID"] == int(saleInput):
+                    salesID = sale["salesID"]
+                    spID = sale["salesPersonalID"]
+                    cid = sale["customerID"]
+                    pid = sale["productID"]
+                    qua = sale["quantity"]
+                    output = render_template("sale.html",
+                                             salesID=salesID,
+                                             spID=spID,
+                                             cid=cid,
+                                             pid=pid,
+                                             qua=qua,
+                                             result="yes")
+                    return output
+        else:
+            output = render_template("sale.html", noresult="Geen resultaat")
+            return output
+
+    else:
+        output = render_template("sale.html")
+        return output
+
+####
+# POST the sale
+@app.route('/sales', methods=['POST'])
+def postSales():
+    content = request.headers.get('Content-Type')
+
+    # als het XML is
+    if content == "application/xml":
+        xmlData = xmltodict.parse(request.data)
+        xmlData["id"] = uuid.uuid4()
+        products.append(xmlData)
+        return xmlData
+
+    # als het JSON is
+    else:
+        if not request.json:
+            abort(400)  # error als foutmelding
+        jsonData = request.json
+        jsonData["id"] = uuid.uuid4()
+        products.append(jsonData)
+        return jsonData
+
+
+# PUT the sale #todo afmaken
+# @app.route('/sales/<id>', methods=['PUT'])
+# def putSales():
+#     content = request.headers.get('Content-Type')
+#     id = request.view_args['id']
+
+
+# DELETE the sale
+@app.route('/sales/<id>', methods=['DELETE'])
+def delSales(id):
+    response = Response()
+    for sale in sales:
+        if sale["id"] == int(id):
+            sales.remove(sale)
+            response.status_code = 200
+        else:
+            response.status_code = 404
+    return response
+
 
 ############################ TEST CODE #######################################
 
-@app.route('/login', methods=['GET', 'POST'])
-# @auth.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == "POST":
-        # todo input validatie
-        email = request.form.get('email')
-        ww = request.form.get('password')
-
-        # klik zoek er is mark
-        e = render_template("login.html", test=email + ww)
-    else:
-        # start geen mark
-        e = render_template("login.html")
-    return e
 
 
 # Debug function enabled

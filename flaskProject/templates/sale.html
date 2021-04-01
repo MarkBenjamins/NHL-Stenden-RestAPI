@@ -1,13 +1,37 @@
 {% extends "default.html" %}
-{% block title %} Login {% endblock %}
+{% block title %} Sale {% endblock %}
 {% block content%}
 
+<form method="POST">
+  <h1>Get product info by SalesID</h1>
+  <div>
+    <label>Put in sale ID</label>
+    <input
+      type="number"
+      class="form-control"
+      id="saleInput"
+      name="saleInput"
+      placeholder="Enter 21, 22 or 23"
+    />
+  </div>
 
-    <h1><a href="/"> Yeet page </a></h1>
-    <hr>
-    <br>
-    <h1><a href="/sales">Sale page</a></h1>
+<br>
+<!-- respons on the input-->
+  {%if result == "yes"%}
+  <p>Sale ID: {{ salesID }}</p>
+  <p>Sale Personal ID: {{ spID }}</p>
+  <p>Customer ID: {{ cid }}</p>
+  <p>Product ID: {{ pid }}</p>
+  <p>Quantity: {{ qua }}</p>
+  {%endif%}
 
+<!-- no respons on the input-->
+  {{noresult}}
 
+<br>
+<br>
+
+  <button type="submit">Zoek</button>
+</form>
 
 {% endblock %}
