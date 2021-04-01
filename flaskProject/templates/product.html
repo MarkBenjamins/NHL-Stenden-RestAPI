@@ -16,13 +16,16 @@
   </div>
 
 <br>
-  {%if note == "yes"%}
+<!-- respons on the input-->
+  {%if result == "yes"%}
   <p>Product ID: {{ productID }}</p>
   <p>Name: {{ name }}</p>
   <p>Price: {{ price }}</p>
   {%endif%}
 
+<!-- no respons on the input-->
   {{noresult}}
+
 <br>
 <br>
 

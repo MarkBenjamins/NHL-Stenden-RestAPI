@@ -66,7 +66,7 @@ def getProductsWithID():
                     output = render_template("product.html",
                                              productID=pro,
                                              name=name,
-                                             price=price, note="yes")
+                                             price=price, result="yes")
                     return output
         else:
             output = render_template("product.html", noresult="Geen resultaat")
