@@ -1,11 +1,15 @@
-from flask import Flask, render_template, request, jsonify, Response, abort
+from flask import Flask, render_template, request, jsonify, Response, abort, Blueprint
+from flaskProject import create_app
 
 import xmltodict
 import uuid
 import validator
 import json
 
+auth = Blueprint('auth', __name__)
+
 app = Flask(__name__)
+app1 = create_app()
 
 # if __name__ == '__main__':
 #   app.run()
@@ -13,7 +17,8 @@ app = Flask(__name__)
 # Data
 products = [
     {"productID": 1, "name": "cat food", "price": 1.25},
-    {"productID": 2, "name": "dog food", "price": 1.25}
+    {"productID": 2, "name": "dog food", "price": 5.35},
+    {"productID": 3, "name": "guinea pig food", "price": 12.00}
 ]
 
 sales = [
@@ -34,7 +39,7 @@ customers = [
 # The home page
 @app.route('/', methods=['GET'])
 def home():
-    return render_template("Home.html")
+    return render_template("home.html")
 
 
 ############################ Product ################################
@@ -43,6 +48,30 @@ def home():
 def getProducts():
     return jsonify(products)  # Products to JSON file
 
+
+###
+# todo fix this man
+# GET the product of the ID
+@app.route('/product', methods=["GET", "POST"])
+def getProductsWithID():
+    if request.method == "POST":
+        # user input number
+        productInput = request.form.get('productInput')
+        if int(productInput) > 0 and int(productInput) < 4:
+            for product in products:
+                if product["productID"] == int(productInput):
+                    a = render_template("product.html", productID=product["productID"], name=product["name"], price=product["price"])
+                    return a
+        else:
+            a = render_template("product.html", productID="Geen resultaat")
+            return a
+
+    else:
+        a = render_template("product.html")
+        return a
+
+
+###
 
 # todo validatie goed maken dat hij wel door laat
 # POST the product
@@ -252,7 +281,24 @@ def delcustomers(id):
     return response
 
 
-#######################################################################
+############################ TEST CODE #######################################
+
+@app.route('/login', methods=['GET', 'POST'])
+# @auth.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == "POST":
+        # todo input validatie
+        email = request.form.get('email')
+        ww = request.form.get('password')
+
+        # klik zoek er is mark
+        e = render_template("login.html", test=email + ww)
+    else:
+        # start geen mark
+        e = render_template("login.html")
+    return e
+
+
 # Debug function enabled
 if __name__ == "__main__":
     app.run(debug=True)

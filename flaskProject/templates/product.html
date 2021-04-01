@@ -1,0 +1,29 @@
+{% extends "default.html" %}
+{% block title %} product {% endblock %}
+{% block content%}
+
+<form method="POST">
+
+  <div>
+    <input
+      type="number"
+      class="form-control"
+      id="productInput"
+      name="productInput"
+      placeholder="Enter 1,2 or 3"
+    />
+  </div>
+
+<br>
+  {{ productID }}
+  {{ name }}
+  {{ price }}
+<br>
+<br>
+
+  <button type="submit">Zoek</button>
+</form>
+<br>
+<a href="/">Home</a>
+
+{% endblock %}
