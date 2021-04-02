@@ -17,7 +17,7 @@ School assignment for the course dataprocessing where an API must be created.
 3. Open the file in [PyCharm](https://www.jetbrains.com/pycharm/download/#section=windows) or a other code editer with Python version 3.9 support
 4. Install all the requirements, which can be found in the [requiremenst](https://github.com/MarkBenjamins/NHL-Stenden-RestAPI/blob/main/requirements) file in this repository
    - You can install the requirements manualy in PyCharm by using **Ctrl + Alt + S** to open the settings
-   - Go to Project and then to *Python interpreter* and make sure you have all [requiremenst](https://github.com/MarkBenjamins/NHL-Stenden-RestAPI/blob/main/requirements) installed
+   - Go to *Project* and then to *Python interpreter* and make sure you have all [requiremenst](https://github.com/MarkBenjamins/NHL-Stenden-RestAPI/blob/main/requirements) installed
 
 5. If there are no errors you can start the application by hitting **Shift + F10**
 6. Then go to [http://127.0.0.1:5000/ ](http://127.0.0.1:5000/) to view the application
