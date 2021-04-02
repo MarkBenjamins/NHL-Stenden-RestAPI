@@ -18,7 +18,8 @@ School assignment for the course dataprocessing where an API must be created.
 4. Install all the requirements, which can be found in the [requiremenst](https://github.com/MarkBenjamins/NHL-Stenden-RestAPI/blob/main/requirements) file in this repository
    - You can install the requirements manualy in PyCharm by using **Ctrl + Alt + S** to open the settings
    - Go to Project and then to *Python interpreter* and make shure you have the following list installed
-|  Package  | Version |
+   
+| Package | Version |
 | --- | --- |
 | Flask | 1.1.2 |
 | Jinja2 | 2.11.3 |
