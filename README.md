@@ -23,4 +23,4 @@ School assignment for the course dataprocessing where an API must be created.
 6. Then go to [http://127.0.0.1:5000/ ](http://127.0.0.1:5000/) to view the application
 
 ## Author
-- Mark Benjamins: [GitHub](https://github.com/MarkBenjamins/NHL-Stenden-RestAPI)
+- Mark Benjamins - *Still working on this project*: [GitHub](https://github.com/MarkBenjamins/NHL-Stenden-RestAPI)
