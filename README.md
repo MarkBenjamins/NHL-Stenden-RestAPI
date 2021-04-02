@@ -19,9 +19,9 @@ School assignment for the course dataprocessing where an API must be created.
    - You can install the requirements manualy in PyCharm by using **Ctrl + Alt + S** to open the settings
    - Go to Project and then to *Python interpreter* and make shure you have the following list installed
 |  Package  | Version |
-| --------- | --------|
-| Flask     | 1.1.2   |
-| Jinja2    | 2.11.3  |
+| --- | --- |
+| Flask | 1.1.2 |
+| Jinja2 | 2.11.3 |
 
 5. If there are no errors you can start the application by hitting **Shift + F10**
 6. Then go to [http://127.0.0.1:5000/ ](http://127.0.0.1:5000/) to view the application
