@@ -88,12 +88,12 @@ def postProducts():
             products.append(xmlData)
             return xmlData
         else:
-            abort(400)  # error code 400
+            abort(400)
 
     # als het JSON is
     else:
         if not request.json:
-            abort(400)  # error code 400
+            abort(400)
         else:
             jsonData = request.json
             is_valid = validator.is_valid_json(json.dumps(jsonData))
@@ -102,7 +102,7 @@ def postProducts():
                 products.append(jsonData)
                 return jsonData
             else:
-                abort(400)  # error code 400
+                abort(400)
 
 
 # PUT the product
@@ -139,11 +139,13 @@ def delProducts(pid):
     response = Response()
     for product in products:
         if product["productID"] == int(pid):
+            print(pid + " Has been deleted")
             products.remove(product)
             response.status_code = 200
         else:
+            print(pid + " Has not been deleted")
             response.status_code = 404
-    return response
+        return response
 
 
 ############################ Employees ################################
@@ -238,11 +240,13 @@ def delEmployees(employeeID):
     response = Response()
     for employee in employees:
         if employee["employeeID"] == int(employeeID):
+            print(employeeID + " Has been deleted")
             employees.remove(employee)
             response.status_code = 200
         else:
+            print(employeeID + " Has not been deleted")
             response.status_code = 404
-    return response
+        return response
 
 
 ############################ Customers ################################
@@ -337,11 +341,13 @@ def delCustomers(customerID):
     response = Response()
     for customer in customers:
         if customer["customerID"] == int(customerID):
+            print(customerID + " Has been deleted")
             customers.remove(customer)
             response.status_code = 200
         else:
+            print(customerID + " Has not been deleted")
             response.status_code = 404
-    return response
+        return response
 
 
 ############################ Sale #####################################
@@ -438,11 +444,13 @@ def delSales(salesID):
     response = Response()
     for sale in sales:
         if sale["salesID"] == int(salesID):
+            print(salesID + " Has been deleted")
             sales.remove(sale)
             response.status_code = 200
         else:
+            print(salesID + " Has not been deleted")
             response.status_code = 404
-    return response
+        return response
 
 
 # Debug function enabled
